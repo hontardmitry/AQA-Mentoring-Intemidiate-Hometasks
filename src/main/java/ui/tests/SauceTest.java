@@ -1,6 +1,8 @@
 package ui.tests;
 
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static utils.Constants.getBaseUrl;
 import static utils.Constants.getInventoryUrl;
 import static utils.Constants.getStandardUser;
@@ -10,11 +12,11 @@ import static utils.LogUtils.getLoggerForCurrentClass;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.google.common.collect.ImmutableMap;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.slf4j.Logger;
 import ui.core.BaseTest;
 import ui.pages.ShoppingCartPage;
@@ -51,10 +53,9 @@ public class SauceTest extends BaseTest {
      */
     @Test
     @DisplayName("Regular user login test")
-    @Tag("login")
     public void checkSuccessfulLogin(TestInfo testInfo) {
         loginWithCredentials(STANDARD_USER, STANDARD_USER_PWD);
-        Assertions.assertEquals(getWebDriver().getCurrentUrl(), BASE_URL + INVENTORY_URL);
+        assertEquals(BASE_URL + INVENTORY_URL, getWebDriver().getCurrentUrl());
     }
 
     /**
@@ -64,7 +65,6 @@ public class SauceTest extends BaseTest {
      */
     @Test
     @DisplayName("Navigation menu options test")
-    @Tag("navigation")
     public void checkNavigationMenuOptions(TestInfo testInfo) {
         loginWithCredentials(STANDARD_USER, STANDARD_USER_PWD);
         pageHeader.getNavigationMenuButton().should(Condition.visible).click();
@@ -72,10 +72,10 @@ public class SauceTest extends BaseTest {
         ElementsCollection menuOptions = pageHeader.getNavigationMenuOptions();
 
         LOGGER.info("Checking list of links");
-        Assertions.assertEquals(menuOptions.size(), expectedMainMenuOptionsMap.size());
+        assertEquals(menuOptions.size(), expectedMainMenuOptionsMap.size());
         menuOptions.forEach(optionLink -> {
-            Assertions.assertTrue(expectedMainMenuOptionsMap.containsKey(optionLink.attr("id")));
-            Assertions.assertTrue(expectedMainMenuOptionsMap.containsValue(optionLink.text()));
+            assertTrue(expectedMainMenuOptionsMap.containsKey(optionLink.attr("id")));
+            assertTrue(expectedMainMenuOptionsMap.containsValue(optionLink.text()));
         });
     }
 
@@ -85,8 +85,7 @@ public class SauceTest extends BaseTest {
      * @param testInfo the test info
      */
     @Test
-    @DisplayName("Nullpointer exception test")
-    @Tag("Java 14")
+    @DisplayName("Null pointer exception test")
     public void checkNullPointer(TestInfo testInfo) {
         loginWithCredentials(STANDARD_USER, STANDARD_USER_PWD);
         pageHeader.getCartButton().should(Condition.visible).click();
@@ -96,7 +95,7 @@ public class SauceTest extends BaseTest {
 //        Assertions.assertThrows(NullPointerException.class, () -> {
 //            filteredList.get(0);
 //        });
-        Assertions.assertTrue(filteredList.get(0).$(".inventory_item_price").exists());
+        assertTrue(filteredList.get(0).$(".inventory_item_price").exists());
     }
 
     /**
@@ -106,13 +105,18 @@ public class SauceTest extends BaseTest {
      * @param actualStatus    the actual status
      * @param isReopenEnabled the is reopen enabled
      */
-    @Test
+    @ParameterizedTest
     @DisplayName("Switch-case test")
-    @Tag("Java 14")
+    @CsvSource({
+        "Open,Open,true",
+        "Awaiting reply from customer,Customer replied,false",
+        "Awaiting reply from customer,Awaiting reply from customer,false",
+        "Closed,Open,true",
+        "Closed,Open,false",
+    })
     public void assertCartItemStatusAfterQuantityUpdate(String initialStatus, String actualStatus,
                                                         boolean isReopenEnabled) {
         String expectedStatus = switch (initialStatus) {
-            case "New", "Open", "Customer replied" -> initialStatus;
             case "Closed" -> {
                 if (isReopenEnabled) {
                     yield "Open";
@@ -120,12 +124,12 @@ public class SauceTest extends BaseTest {
                     yield initialStatus;
                 }
             }
+            case "New", "Open", "Customer replied" -> initialStatus;
             case "Awaiting reply from customer" -> "Customer replied";
             default -> throw new IllegalArgumentException("Invalid data is provided");
         };
 
-        System.out.printf("Actual item status is %s%n",
-            (actualStatus.equals(expectedStatus)) ? "valid" : "not valid");
+        assertEquals(expectedStatus, actualStatus);
     }
 }
 
