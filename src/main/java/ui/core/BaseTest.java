@@ -1,17 +1,17 @@
 package ui.core;
 
 import static utils.Constants.getBaseUrl;
+import static utils.LogUtils.getLoggerForCurrentClass;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
-import org.junit.Before;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.TestInfo;
+import org.slf4j.Logger;
 import ui.pages.LoginPage;
 import utils.Waiter;
-
-import java.lang.reflect.Method;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
@@ -19,10 +19,9 @@ import io.github.bonigarcia.wdm.WebDriverManager;
  * The type Base test.
  */
 public abstract class BaseTest {
-    private final ThreadLocal<String> testName = new ThreadLocal<>();
     private static final LoginPage LOGIN_PAGE = new LoginPage();
     private static final String BASE_URL = getBaseUrl();
-
+    private static final Logger LOGGER = getLoggerForCurrentClass();
 
     /**
      * Set up.
@@ -37,37 +36,24 @@ public abstract class BaseTest {
 
     /**
      * Init.
+     *
+     * @param testInfo the test info
      */
     @BeforeEach
-    public void init(){
+    public void init(TestInfo testInfo){
         setUp();
+        LOGGER.info("WOW! Test '{}' started.", testInfo.getDisplayName());
     }
 
     /**
      * Tear down.
+     *
+     * @param testInfo the test info
      */
     @AfterEach
-    public void tearDown(){
+    public void tearDown(TestInfo testInfo){
         Selenide.closeWebDriver();
-    }
-
-    /**
-     * Sets test name.
-     *
-     * @param method the method
-     */
-    @Before
-    public void setTestName(Method method) {
-        testName.set(String.format("%s#%s", method.getDeclaringClass().getSimpleName(), method.getName()));
-    }
-
-    /**
-     * Gets test name.
-     *
-     * @return the test name
-     */
-    public String getTestName() {
-        return testName.get();
+        LOGGER.info("Test '{}' finished.", testInfo.getDisplayName());
     }
 
     /**

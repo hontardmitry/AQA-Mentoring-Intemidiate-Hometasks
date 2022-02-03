@@ -37,6 +37,11 @@ public class PageHeader {
         return getNavigationMenu().$$(".bm-item-list a");
     }
 
+    /**
+     * Get cart button selenide element.
+     *
+     * @return the selenide element
+     */
     public SelenideElement getCartButton(){
         return $(".shopping_cart_link");
     }
