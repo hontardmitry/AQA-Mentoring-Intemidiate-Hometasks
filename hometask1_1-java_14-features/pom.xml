@@ -121,7 +121,7 @@
             </plugin>
         </plugins>
 
-        <testOutputDirectory>target/classes</testOutputDirectory>
+        <testOutputDirectory>../target/classes</testOutputDirectory>
     </build>
 
 </project>
