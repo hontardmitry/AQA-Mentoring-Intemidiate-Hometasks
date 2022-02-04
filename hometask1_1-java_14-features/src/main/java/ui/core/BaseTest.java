@@ -4,7 +4,6 @@ import static utils.Constants.getBaseUrl;
 import static utils.LogUtils.getLoggerForCurrentClass;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,18 +19,10 @@ public abstract class BaseTest {
     private static final String BASE_URL = getBaseUrl();
     private static final Logger LOGGER = getLoggerForCurrentClass();
 
-    public void setUp(){
-        WebDriverManager.chromedriver().setup();
-        Configuration.browser = "chrome";
-        Configuration.driverManagerEnabled = true;
-        Configuration.browserSize = "1920x1080";
-        Configuration.headless = false;
-    }
-
     @BeforeEach
     public void init(TestInfo testInfo){
-        setUp();
-        LOGGER.info("WOW! Test '{}' started.", testInfo.getDisplayName());
+        WebDriverManager.chromedriver().setup();
+        LOGGER.info("Test '{}' started.", testInfo.getDisplayName());
     }
 
     @AfterEach
@@ -41,17 +32,12 @@ public abstract class BaseTest {
     }
 
     public static void loginWithCredentials(String name, String password) {
-        openPage(BASE_URL);
+        Selenide.open(BASE_URL);
 
         LOGIN_PAGE.getNameInput().should(Condition.visible).setValue(name);
         LOGIN_PAGE.getPasswordInput().should(Condition.visible).setValue(password);
         LOGIN_PAGE.getLoginButton().should(Condition.visible).click();
 
-        Waiter.waitForReadyState();
-    }
-
-    public static void openPage(String url){
-        Selenide.open(url);
         Waiter.waitForReadyState();
     }
 }

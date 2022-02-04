@@ -19,7 +19,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.slf4j.Logger;
 import ui.core.BaseTest;
-import ui.pages.ShoppingCartPage;
 import ui.pages.components.PageHeader;
 
 import java.util.Map;
@@ -28,7 +27,6 @@ public class SauceTest extends BaseTest {
     private static final Logger LOGGER = getLoggerForCurrentClass();
 
     private final static PageHeader pageHeader = new PageHeader();
-    private final static ShoppingCartPage cartPage = new ShoppingCartPage();
 
     private final static String BASE_URL = getBaseUrl();
     private final static String INVENTORY_URL = getInventoryUrl();
@@ -74,9 +72,6 @@ public class SauceTest extends BaseTest {
         ElementsCollection filteredList = null;
 
         LOGGER.info("Provoke NPE");
-//        Assertions.assertThrows(NullPointerException.class, () -> {
-//            filteredList.get(0);
-//        });
         assertTrue(filteredList.get(0).$(".inventory_item_price").exists());
     }
 

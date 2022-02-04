@@ -1,9 +1,6 @@
 package utils;
 
 public class Constants {
-    public Constants() {
-    }
-
     private final static String BASE_URL = "https://www.saucedemo.com/";
     private static final String STANDARD_USER = "standard_user";
     private static final String STANDARD_USER_PWD = "secret_sauce";
