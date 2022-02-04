@@ -24,9 +24,6 @@ import ui.pages.components.PageHeader;
 
 import java.util.Map;
 
-/**
- * The type Sauce test.
- */
 public class SauceTest extends BaseTest {
     private static final Logger LOGGER = getLoggerForCurrentClass();
 
@@ -46,11 +43,6 @@ public class SauceTest extends BaseTest {
     );
 
 
-    /**
-     * Successful login test.
-     *
-     * @param testInfo the test info
-     */
     @Test
     @DisplayName("Regular user login test")
     public void checkSuccessfulLogin(TestInfo testInfo) {
@@ -58,11 +50,6 @@ public class SauceTest extends BaseTest {
         assertEquals(BASE_URL + INVENTORY_URL, getWebDriver().getCurrentUrl());
     }
 
-    /**
-     * Check navigation menu options.
-     *
-     * @param testInfo the test info
-     */
     @Test
     @DisplayName("Navigation menu options test")
     public void checkNavigationMenuOptions(TestInfo testInfo) {
@@ -79,11 +66,6 @@ public class SauceTest extends BaseTest {
         });
     }
 
-    /**
-     * Check null pointer.
-     *
-     * @param testInfo the test info
-     */
     @Test
     @DisplayName("Null pointer exception test")
     public void checkNullPointer(TestInfo testInfo) {
@@ -98,13 +80,6 @@ public class SauceTest extends BaseTest {
         assertTrue(filteredList.get(0).$(".inventory_item_price").exists());
     }
 
-    /**
-     * Assert cart item status after quantity update.
-     *
-     * @param initialStatus   the initial status
-     * @param actualStatus    the actual status
-     * @param isReopenEnabled the is reopen enabled
-     */
     @ParameterizedTest
     @DisplayName("Switch-case test")
     @CsvSource({

@@ -15,17 +15,11 @@ import utils.Waiter;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
-/**
- * The type Base test.
- */
 public abstract class BaseTest {
     private static final LoginPage LOGIN_PAGE = new LoginPage();
     private static final String BASE_URL = getBaseUrl();
     private static final Logger LOGGER = getLoggerForCurrentClass();
 
-    /**
-     * Set up.
-     */
     public void setUp(){
         WebDriverManager.chromedriver().setup();
         Configuration.browser = "chrome";
@@ -34,34 +28,18 @@ public abstract class BaseTest {
         Configuration.headless = false;
     }
 
-    /**
-     * Init.
-     *
-     * @param testInfo the test info
-     */
     @BeforeEach
     public void init(TestInfo testInfo){
         setUp();
         LOGGER.info("WOW! Test '{}' started.", testInfo.getDisplayName());
     }
 
-    /**
-     * Tear down.
-     *
-     * @param testInfo the test info
-     */
     @AfterEach
     public void tearDown(TestInfo testInfo){
         Selenide.closeWebDriver();
         LOGGER.info("Test '{}' finished.", testInfo.getDisplayName());
     }
 
-    /**
-     * Login with credentials.
-     *
-     * @param name     the name
-     * @param password the password
-     */
     public static void loginWithCredentials(String name, String password) {
         openPage(BASE_URL);
 
@@ -72,11 +50,6 @@ public abstract class BaseTest {
         Waiter.waitForReadyState();
     }
 
-    /**
-     * Open page.
-     *
-     * @param url the url
-     */
     public static void openPage(String url){
         Selenide.open(url);
         Waiter.waitForReadyState();
