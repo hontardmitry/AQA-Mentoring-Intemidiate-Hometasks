@@ -1,37 +1,22 @@
-package ui.tests;
+package ui;
 
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static utils.Constants.getBaseUrl;
-import static utils.Constants.getInventoryUrl;
-import static utils.Constants.getStandardUser;
-import static utils.Constants.getStandardUserPwd;
-import static utils.LogUtils.getLoggerForCurrentClass;
+import static utils.enums.Constants.BASE_URL;
+import static utils.enums.Constants.INVENTORY_URL;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.google.common.collect.ImmutableMap;
+import core.BaseTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.slf4j.Logger;
-import ui.core.BaseTest;
-import ui.pages.components.PageHeader;
 
 import java.util.Map;
 
 public class SauceTest extends BaseTest {
-    private static final Logger LOGGER = getLoggerForCurrentClass();
-
-    private final static PageHeader pageHeader = new PageHeader();
-
-    private final static String BASE_URL = getBaseUrl();
-    private final static String INVENTORY_URL = getInventoryUrl();
-    private static final String STANDARD_USER = getStandardUser();
-    private static final String STANDARD_USER_PWD = getStandardUserPwd();
 
     private final Map<String, String> expectedMainMenuOptionsMap = ImmutableMap.of(
         "inventory_sidebar_link", "ALL ITEMS",
@@ -40,20 +25,18 @@ public class SauceTest extends BaseTest {
         "reset_sidebar_link", "RESET APP STATE"
     );
 
-
     @Test
     @DisplayName("Regular user login test")
-    public void checkSuccessfulLogin(TestInfo testInfo) {
-        loginWithCredentials(STANDARD_USER, STANDARD_USER_PWD);
-        assertEquals(BASE_URL + INVENTORY_URL, getWebDriver().getCurrentUrl());
+    public void checkSuccessfulLogin() {
+        loginWithStandardUser();
+        assertEquals(BASE_URL.getValue() + INVENTORY_URL.getValue(), getWebDriver().getCurrentUrl());
     }
 
     @Test
     @DisplayName("Navigation menu options test")
-    public void checkNavigationMenuOptions(TestInfo testInfo) {
-        loginWithCredentials(STANDARD_USER, STANDARD_USER_PWD);
-        pageHeader.getNavigationMenuButton().should(Condition.visible).click();
-
+    public void checkNavigationMenuOptions() {
+        loginWithStandardUser();
+        pageHeader.getNavigationMenuButton().click();
         ElementsCollection menuOptions = pageHeader.getNavigationMenuOptions();
 
         LOGGER.info("Checking list of links");
@@ -66,9 +49,9 @@ public class SauceTest extends BaseTest {
 
     @Test
     @DisplayName("Null pointer exception test")
-    public void checkNullPointer(TestInfo testInfo) {
-        loginWithCredentials(STANDARD_USER, STANDARD_USER_PWD);
-        pageHeader.getCartButton().should(Condition.visible).click();
+    public void checkNullPointer() {
+        loginWithStandardUser();
+        pageHeader.getCartButton().click();
         ElementsCollection filteredList = null;
 
         LOGGER.info("Provoke NPE");
@@ -82,7 +65,7 @@ public class SauceTest extends BaseTest {
         "Awaiting reply from customer,Customer replied,false",
         "Awaiting reply from customer,Awaiting reply from customer,false",
         "Closed,Open,true",
-        "Closed,Open,false",
+        "Closed,Closed,false",
     })
     public void assertCartItemStatusAfterQuantityUpdate(String initialStatus, String actualStatus,
                                                         boolean isReopenEnabled) {
