@@ -17,6 +17,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import java.util.InputMismatchException;
 import java.util.Map;
+import java.util.Objects;
 
 public class SauceTest extends BaseTest {
 
@@ -95,7 +96,7 @@ public class SauceTest extends BaseTest {
     }
 
     private void assertSocialLink(SelenideElement link) {
-        String expectedLink = switch(link.getAttribute("class")){
+        String expectedLink = switch(Objects.requireNonNull(link.getAttribute("class"))){
             case "social_twitter" -> "https://twitter.com/saucelabs";
             case "social_facebook" -> "https://www.facebook.com/saucelabs";
             case "social_linkedin" -> "https://www.linkedin.com/company/sauce-labs/";
