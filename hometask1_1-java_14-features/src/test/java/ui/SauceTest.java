@@ -7,6 +7,7 @@ import static utils.enums.Constants.BASE_URL;
 import static utils.enums.Constants.INVENTORY_URL;
 
 import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
 import com.google.common.collect.ImmutableMap;
 import core.BaseTest;
 import org.junit.jupiter.api.DisplayName;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import java.util.InputMismatchException;
 import java.util.Map;
 
 public class SauceTest extends BaseTest {
@@ -36,8 +38,8 @@ public class SauceTest extends BaseTest {
     @DisplayName("Navigation menu options test")
     public void checkNavigationMenuOptions() {
         loginWithStandardUser();
-        pageHeader.getNavigationMenuButton().click();
-        ElementsCollection menuOptions = pageHeader.getNavigationMenuOptions();
+        PAGE_HEADER.getNavigationMenuButton().click();
+        ElementsCollection menuOptions = PAGE_HEADER.getNavigationMenuOptions();
 
         LOGGER.info("Checking list of links");
         assertEquals(menuOptions.size(), expectedMainMenuOptionsMap.size());
@@ -51,7 +53,7 @@ public class SauceTest extends BaseTest {
     @DisplayName("Null pointer exception test")
     public void checkNullPointer() {
         loginWithStandardUser();
-        pageHeader.getCartButton().click();
+        PAGE_HEADER.getCartButton().click();
         ElementsCollection filteredList = null;
 
         LOGGER.info("Provoke NPE");
@@ -83,6 +85,23 @@ public class SauceTest extends BaseTest {
         };
 
         assertEquals(expectedStatus, actualStatus);
+    }
+
+    @Test
+    @DisplayName("Switch-case ui test")
+    public void checkSocialLinks(){
+        loginWithStandardUser();
+        PAGE_FOOTER.getSocialLinks().forEach(this::assertSocialLink);
+    }
+
+    private void assertSocialLink(SelenideElement link) {
+        String expectedLink = switch(link.getAttribute("class")){
+            case "social_twitter" -> "https://twitter.com/saucelabs";
+            case "social_facebook" -> "https://www.facebook.com/saucelabs";
+            case "social_linkedin" -> "https://www.linkedin.com/company/sauce-labs/";
+            default -> throw new InputMismatchException("Unexpected class provided");
+        };
+        assertEquals(expectedLink, link.$("a").getAttribute("href"));
     }
 }
 

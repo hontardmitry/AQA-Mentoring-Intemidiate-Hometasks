@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
 import org.slf4j.Logger;
 import ui.pages.LoginPage;
+import ui.pages.components.PageFooter;
 import ui.pages.components.PageHeader;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
@@ -18,7 +19,8 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 public abstract class BaseTest {
     private static final LoginPage LOGIN_PAGE = new LoginPage();
     protected static final Logger LOGGER = getLoggerForCurrentClass();
-    protected final static PageHeader pageHeader = new PageHeader();
+    protected final static PageHeader PAGE_HEADER = new PageHeader();
+    protected static final PageFooter PAGE_FOOTER = new PageFooter();
 
     @BeforeEach
     public void init(TestInfo testInfo) {
