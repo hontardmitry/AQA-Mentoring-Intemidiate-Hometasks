@@ -1,37 +1,36 @@
-package core;
+package ui;
 
-import static utils.LogUtils.getLoggerForCurrentClass;
 import static utils.enums.Constants.BASE_URL;
 import static utils.enums.Constants.STANDARD_USER;
 import static utils.enums.Constants.STANDARD_USER_PASSWORD;
 
+import static java.lang.String.format;
+
 import com.codeborne.selenide.Selenide;
+import org.apache.log4j.Logger;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
-import org.slf4j.Logger;
 import ui.pages.LoginPage;
-import ui.pages.components.PageFooter;
 import ui.pages.components.PageHeader;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 public abstract class BaseTest {
+    protected static final Logger LOGGER =  Logger.getLogger(BaseTest.class);
     private static final LoginPage LOGIN_PAGE = new LoginPage();
-    protected static final Logger LOGGER = getLoggerForCurrentClass();
     protected final static PageHeader PAGE_HEADER = new PageHeader();
-    protected static final PageFooter PAGE_FOOTER = new PageFooter();
 
     @BeforeEach
     public void init(TestInfo testInfo) {
         WebDriverManager.chromedriver().setup();
-        LOGGER.info("Test '{}' started.", testInfo.getDisplayName());
+        LOGGER.info(format("Test '%s' started.", testInfo.getDisplayName()));
     }
 
     @AfterEach
     public void tearDown(TestInfo testInfo) {
         Selenide.closeWebDriver();
-        LOGGER.info("Test '{}' finished.", testInfo.getDisplayName());
+        LOGGER.info(format("Test '%s' finished.", testInfo.getDisplayName()));
     }
 
     public static void loginWithStandardUser() {

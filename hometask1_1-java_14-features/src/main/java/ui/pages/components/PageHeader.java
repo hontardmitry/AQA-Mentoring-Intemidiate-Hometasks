@@ -7,23 +7,24 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 
 public class PageHeader {
+    private final static String NAVIGATION_MENU_BTN_LOCATOR = "#react-burger-menu-btn";
+    private final static String NAVIGATION_MENU_CONTAINER_LOCATOR = ".bm-menu-wrap";
+    private final static String NAVIGATION_MENU_OPTION_LINK_LOCATOR = "a";
+    private final static String SHOPPING_CART_LINK_LOCATOR = ".shopping_cart_link";
 
     public SelenideElement getNavigationMenuButton() {
-        return $("#react-burger-menu-btn").should(Condition.visible);
+        return $(NAVIGATION_MENU_BTN_LOCATOR).should(Condition.visible);
     }
 
     public SelenideElement getNavigationMenu() {
-
-        return $(".bm-menu-wrap").should(Condition.visible);
+        return $(NAVIGATION_MENU_CONTAINER_LOCATOR).should(Condition.visible);
     }
 
     public ElementsCollection getNavigationMenuOptions() {
-
-        return getNavigationMenu().should(Condition.visible).$$(".bm-item-list a");
+        return getNavigationMenu().should(Condition.visible).$$(NAVIGATION_MENU_OPTION_LINK_LOCATOR);
     }
 
     public SelenideElement getCartButton() {
-
-        return $(".shopping_cart_link").should(Condition.visible);
+        return $(SHOPPING_CART_LINK_LOCATOR).should(Condition.visible);
     }
 }

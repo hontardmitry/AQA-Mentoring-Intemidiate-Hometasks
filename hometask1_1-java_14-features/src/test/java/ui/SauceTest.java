@@ -7,19 +7,19 @@ import static utils.enums.Constants.BASE_URL;
 import static utils.enums.Constants.INVENTORY_URL;
 
 import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.SelenideElement;
 import com.google.common.collect.ImmutableMap;
-import core.BaseTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import ui.pages.components.PageFooter;
+import utils.assertions.SocialLinksAssertion;
 
-import java.util.InputMismatchException;
 import java.util.Map;
-import java.util.Objects;
 
 public class SauceTest extends BaseTest {
+
+    private static final PageFooter PAGE_FOOTER = new PageFooter();
 
     private final Map<String, String> expectedMainMenuOptionsMap = ImmutableMap.of(
         "inventory_sidebar_link", "ALL ITEMS",
@@ -92,17 +92,7 @@ public class SauceTest extends BaseTest {
     @DisplayName("Switch-case ui test")
     public void checkSocialLinks(){
         loginWithStandardUser();
-        PAGE_FOOTER.getSocialLinks().forEach(this::assertSocialLink);
-    }
-
-    private void assertSocialLink(SelenideElement link) {
-        String expectedLink = switch(Objects.requireNonNull(link.getAttribute("class"))){
-            case "social_twitter" -> "https://twitter.com/saucelabs";
-            case "social_facebook" -> "https://www.facebook.com/saucelabs";
-            case "social_linkedin" -> "https://www.linkedin.com/company/sauce-labs/";
-            default -> throw new InputMismatchException("Unexpected class provided");
-        };
-        assertEquals(expectedLink, link.$("a").getAttribute("href"));
+        PAGE_FOOTER.getSocialLinks().forEach(SocialLinksAssertion::assertSocialLink);
     }
 }
 
