@@ -6,19 +6,19 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 
 public class LoginPage {
-    private final static String USER_NAME_INPUT_LOCATOR = "#user-name";
-    private final static String USER_PASSWORD_INPUT_LOCATOR = "#password";
-    private final static String LOGIN_BTN_LOCATOR = "#login-button";
+    private SelenideElement userNameInput = $("#user-name");
+    private SelenideElement userPasswordInput = $("#password");
+    private SelenideElement loginBtn = $("#login-button");
 
     public SelenideElement getNameInput() {
-        return $(USER_NAME_INPUT_LOCATOR).should(Condition.visible);
+        return userNameInput.should(Condition.visible);
     }
 
     public SelenideElement getPasswordInput() {
-        return $(USER_PASSWORD_INPUT_LOCATOR).should(Condition.visible);
+        return userPasswordInput.should(Condition.visible);
     }
 
     public SelenideElement getLoginButton() {
-        return $(LOGIN_BTN_LOCATOR).should(Condition.visible);
+        return loginBtn.should(Condition.visible);
     }
 }

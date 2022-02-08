@@ -7,16 +7,24 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 
 public class PageFooter {
-    private final static String SOCIAL_LINKS_CONTAINER_LOCATOR = ".social";
-    private final static String SOCIAL_SINGLE_LINK_CONTAINER_LOCATOR = "li";
-    private final static String SOCIAL_SINGLE_LINK_LOCATOR = "a";
+    private String socialLinkContainerLocator ="li";
+    private String linkLocator ="a";
+    private SelenideElement socialLinksListContainer = $(".social");
+    private SelenideElement socialLink;
+    private ElementsCollection socialLinksContainersList;
 
-    public ElementsCollection getSocialLinks(){
-        return $(SOCIAL_LINKS_CONTAINER_LOCATOR).should(Condition.visible)
-            .$$(SOCIAL_SINGLE_LINK_CONTAINER_LOCATOR);
+    public ElementsCollection getSocialLinksContainersList(){
+        socialLinksContainersList = getSocialLinksListContainer().$$(socialLinkContainerLocator);
+        return socialLinksContainersList;
     }
 
-    public String getSocialLinkValue(SelenideElement parent){
-        return parent.$(SOCIAL_SINGLE_LINK_LOCATOR).getAttribute("href");
+    public SelenideElement getSocialLinksListContainer() {
+        return socialLinksListContainer.should(Condition.visible);
+    }
+
+    public String getSocialLinkValue(SelenideElement socialLinkContainer){
+        socialLink = socialLinkContainer.$(linkLocator);
+        return socialLink.getAttribute("href");
     }
 }
+

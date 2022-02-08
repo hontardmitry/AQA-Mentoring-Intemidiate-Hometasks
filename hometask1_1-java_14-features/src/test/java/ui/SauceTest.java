@@ -40,11 +40,11 @@ public class SauceTest extends BaseTest {
     public void checkNavigationMenuOptions() {
         loginWithStandardUser();
         PAGE_HEADER.getNavigationMenuButton().click();
-        ElementsCollection menuOptions = PAGE_HEADER.getNavigationMenuOptions();
+        ElementsCollection menuOptionsLinksList = PAGE_HEADER.getNavigationMenuOptionsLinksList();
 
         LOGGER.info("Checking list of links");
-        assertEquals(menuOptions.size(), expectedMainMenuOptionsMap.size());
-        menuOptions.forEach(optionLink -> {
+        assertEquals(menuOptionsLinksList.size(), expectedMainMenuOptionsMap.size());
+        menuOptionsLinksList.forEach(optionLink -> {
             assertTrue(expectedMainMenuOptionsMap.containsKey(optionLink.attr("id")));
             assertTrue(expectedMainMenuOptionsMap.containsValue(optionLink.text()));
         });
@@ -66,7 +66,6 @@ public class SauceTest extends BaseTest {
     @CsvSource({
         "Open,Open,true",
         "Awaiting reply from customer,Customer replied,false",
-        "Awaiting reply from customer,Awaiting reply from customer,false",
         "Closed,Open,true",
         "Closed,Closed,false",
     })
@@ -92,7 +91,7 @@ public class SauceTest extends BaseTest {
     @DisplayName("Switch-case ui test")
     public void checkSocialLinks(){
         loginWithStandardUser();
-        PAGE_FOOTER.getSocialLinks().forEach(SocialLinksAssertion::assertSocialLink);
+        PAGE_FOOTER.getSocialLinksContainersList().forEach(SocialLinksAssertion::assertSocialLink);
     }
 }
 
