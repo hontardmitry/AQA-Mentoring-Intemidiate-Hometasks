@@ -7,25 +7,27 @@ public class TestSpring {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
             "applicationContext.xml"
         );
+        Music rockMusic = context.getBean("musicBean", Music.class);
+        MusicPlayer musicPlayer = new MusicPlayer();
+        musicPlayer.playMusicList();
 
-        TestBean testBean = context.getBean("testBean", TestBean.class);
-        System.out.println(testBean.getName());
 
+//        System.out.println(rockMusic.getSong());
+//        MusicPlayer firstMusicPlayer = context.getBean("musicPlayer", MusicPlayer.class);
+//        MusicPlayer secondMusicPlayer = context.getBean("musicPlayer", MusicPlayer.class);
+//
+//        boolean areTheSameObj = firstMusicPlayer == secondMusicPlayer;
+//        System.out.println(areTheSameObj);
+//        System.out.println(firstMusicPlayer);
+//        System.out.println(secondMusicPlayer);
+//
+//        firstMusicPlayer.setVolume(10);
+//        System.out.println(firstMusicPlayer.getVolume());
+//        System.out.println(secondMusicPlayer.getVolume());
+//        firstMusicPlayer.playMusicList();
+//        System.out.println(firstMusicPlayer.getName());
+//        System.out.println(firstMusicPlayer.getVolume());
         context.close();
     }
 
-    interface Music{}
-    class ClassicalMusic implements Music{}
-    class RockMusic implements Music{}
-    class MusicPlayer{
-        private Music music;
-
-        public MusicPlayer(Music music){
-            this.music = music;
-        }
-
-        public void playMusic(){
-
-        }
-    }
 }
