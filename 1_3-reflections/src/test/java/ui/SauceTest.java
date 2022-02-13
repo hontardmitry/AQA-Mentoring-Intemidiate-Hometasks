@@ -5,17 +5,21 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static utils.enums.Constants.BASE_URL;
 import static utils.enums.Constants.INVENTORY_URL;
+import static utils.enums.TestTypes.UI;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.google.common.collect.ImmutableMap;
+import common.BaseTest;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ui.pages.components.PageFooter;
+import utils.annotations.TestType;
 import utils.assertions.SocialLinksAssertion;
 
 import java.util.Map;
 
+@TestType(UI)
 public class SauceTest extends BaseTest {
 
     private static final PageFooter PAGE_FOOTER = new PageFooter();
@@ -61,10 +65,8 @@ public class SauceTest extends BaseTest {
         assertTrue(filteredList.get(0).$(".inventory_item_price").exists());
     }
 
-
-
     @Test
-    @DisplayName("Switch-case ui test")
+    @DisplayName("Check social links test")
     public void checkSocialLinks(){
         loginWithStandardUser();
         PAGE_FOOTER.getSocialLinksContainersList().forEach(SocialLinksAssertion::assertSocialLink);

@@ -1,5 +1,6 @@
-package ui;
+package common;
 
+import static utils.annotations.TestTypeAnnotationProcessor.isTestUI;
 import static utils.enums.Constants.BASE_URL;
 import static utils.enums.Constants.STANDARD_USER;
 import static utils.enums.Constants.STANDARD_USER_PASSWORD;
@@ -23,14 +24,18 @@ public abstract class BaseTest {
 
     @BeforeEach
     public void init(TestInfo testInfo) {
-        WebDriverManager.chromedriver().setup();
+        if (isTestUI(this.getClass())) {
+            WebDriverManager.chromedriver().setup();
+        }
         LOGGER.info(format("Test '%s' started.", testInfo.getDisplayName()));
     }
 
     @AfterEach
     public void tearDown(TestInfo testInfo) {
-        Selenide.closeWebDriver();
-        LOGGER.info(format("Test '%s' finished.", testInfo.getDisplayName()));
+        if (isTestUI(this.getClass())) {
+            Selenide.closeWebDriver();
+        }
+        LOGGER.info(format("Test '%s' finished successfully.", testInfo.getDisplayName()));
     }
 
     public static void loginWithStandardUser() {
