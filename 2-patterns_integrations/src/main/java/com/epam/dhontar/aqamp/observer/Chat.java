@@ -2,10 +2,8 @@ package com.epam.dhontar.aqamp.observer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 public class Chat {
-    private static final Logger LOGGER = Logger.getLogger(Chat.class.getName());
 
     private List messages;
     private List<ChatObserver> observers;

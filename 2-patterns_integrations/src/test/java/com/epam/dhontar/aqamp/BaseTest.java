@@ -12,6 +12,7 @@ import com.epam.dhontar.aqamp.utils.integrations.slack.SlackClient;
 import com.epam.dhontar.aqamp.utils.integrations.testrail.TestRails;
 import com.epam.dhontar.aqamp.utils.integrations.testrail.bindings.APIClient;
 import com.epam.dhontar.aqamp.utils.integrations.testrail.bindings.APIException;
+import com.epam.reportportal.testng.ReportPortalTestNGListener;
 import org.json.simple.JSONObject;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
@@ -19,6 +20,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.Listeners;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -30,20 +32,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Listeners({ReportPortalTestNGListener.class})
 public abstract class BaseTest {
     private static final String USER_DIR = System.getProperty("user.dir");
     private static final Path PATH = Paths.get(USER_DIR);
     private static final String PROJECT_NAME = PATH.getFileName().toString();
     String PROJECT_ID = "1";
-    private APIClient client = null;
 
     List<ChatSubscriber> subscribers = new ArrayList<>();
+    APIClient client;
     Chat chat = new Chat();
     int failedTests = 0;
     int totalRunTests = 0;
 
     @BeforeSuite
-    public void createSuite(ITestContext ctx) throws IOException, APIException {
+    public void configureSubscribers(ITestContext ctx) throws IOException, APIException {
+        for (int i = 0; i < 2; i++){
+            subscribers.add(new ChatSubscriber("Subscriber" + i));
+            chat.addObserver(subscribers.get(i));
+        }
+        chat.addObserver(new SlackClient());
+
         client = new APIClient(TESTRAIL_URL.getValue());
         client.setUser(TESTRAIL_USER.getValue());
         client.setPassword(TESTRAIL_PWD.getValue());
@@ -53,13 +62,12 @@ public abstract class BaseTest {
         JSONObject c = (JSONObject) client.sendPost("add_run/" + PROJECT_ID, data);
         Long suite_id = (Long) c.get("id");
         ctx.setAttribute("suiteId", suite_id);
-
-        for (int i = 0; i < 2; i++){
-            subscribers.add(new ChatSubscriber("Subscriber" + i));
-            chat.addObserver(subscribers.get(i));
-        }
-        chat.addObserver(new SlackClient());
     }
+
+//    @BeforeClass
+//    public void createSuite(ITestContext ctx) throws IOException, APIException {
+//
+//    }
 
     @BeforeMethod
     public void beforeTest(ITestContext ctx, Method method) throws NoSuchMethodException {
