@@ -10,24 +10,25 @@ import com.epam.dhontar.aqamp.api.RestClient;
 import com.epam.dhontar.aqamp.entity.Author;
 import com.epam.dhontar.aqamp.entity.User;
 import com.epam.dhontar.aqamp.utils.integrations.testrail.TestRails;
+import com.epam.reportportal.testng.ReportPortalTestNGListener;
 import org.testng.annotations.Ignore;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import io.restassured.response.Response;
 
-
+@Listeners({ReportPortalTestNGListener.class})
 public class RestTests extends BaseTest {
     private static final int USER_ID = 5;
     private static final String USER_NAME = "User Name";
     private static final String USER_PASSWORD = "password";
-
-    private final RestClient userClient = new RestClient(USERS_URL);
 
     private static final int AUTHOR_ID = 11;
     private static final int ID_BOOK = 11;
     private static final String FIRST_NAME = "User Name";
     private static final String LAST_NAME = "password";
 
+    private final RestClient userClient = new RestClient(USERS_URL);
     private final RestClient authorClient = new RestClient(AUTHORS_URL);
 
     @Test(priority = 2)

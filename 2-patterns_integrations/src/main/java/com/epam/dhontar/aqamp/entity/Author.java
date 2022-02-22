@@ -20,18 +20,6 @@ public class Author {
         return id;
     }
 
-    public int getIdBook() {
-        return idBook;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
     public static class AuthorBuilder {
         private int id;
         private int idBook;
