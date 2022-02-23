@@ -4,7 +4,7 @@ public enum ServicesEndpoints {
     BASE_URL("https://fakerestapi.azurewebsites.net/api/v1/"),
     AUTHORS_URL("Authors/"),
     USERS_URL("Users/"),
-    SLACK_API_URL("https://hooks.slack.com/services/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");
+    SLACK_API_URL("https://hooks.slack.com/services/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");
 
     private final String urlValue;
 

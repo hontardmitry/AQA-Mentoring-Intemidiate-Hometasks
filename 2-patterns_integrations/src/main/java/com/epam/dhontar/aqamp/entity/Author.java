@@ -45,4 +45,16 @@ public class Author {
             return new Author(this);
         }
     }
+
+    public int getIdBook() {
+        return idBook;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
 }
